@@ -1,0 +1,1 @@
+See the Mermaid diagram in the root README. Message flow: Commander publishes -> agents propose -> Commander objects -> counteroffers -> Sacrifice refusals -> draft vN -> validator -> commitments -> draft vN+1 (votes cleared) -> validator PASS -> 4 independent votes -> approval. Event: STALE -> void commitments -> renegotiate -> fresh votes.

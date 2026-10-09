@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARES ACCORD · Mission Control</title>
+<style>
+:root{--bg:#0b0d13;--p:#141824;--p2:#1b2132;--b:#2a3350;--fg:#e9ecf5;--mu:#8791ad;--ac:#ff6b3d;--ac2:#ffb347;--ok:#2fd49a;--no:#ff4d6d;--wn:#f5b942;--bl:#5aa9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1200px 600px at 70% -10%,#2a1710 0,transparent 60%),var(--bg);color:var(--fg);font:14px/1.45 system-ui,"Segoe UI",sans-serif;min-height:100vh}
+header{display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid var(--b);background:#0d1019cc;backdrop-filter:blur(6px);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+.logo{font-weight:800;letter-spacing:.14em;font-size:18px}.logo b{color:var(--ac)}.sp{flex:1}
+.pill{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:var(--p2);border:1px solid var(--b)}
+.s-APPROVED{background:#12392e;color:var(--ok);border-color:var(--ok)}.s-NEGOTIATING{background:#3a2f12;color:var(--wn);border-color:var(--wn)}.s-INFEASIBLE,.s-DEADLOCK{background:#3b1520;color:var(--no);border-color:var(--no)}.s-STALE{background:#3a2412;color:var(--ac);border-color:var(--ac)}
+.steps{display:flex;gap:6px;align-items:center}.st{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;background:var(--p2);border:1px solid var(--b);color:var(--mu)}.st.on{background:var(--ac);color:#fff;border-color:var(--ac);box-shadow:0 0 12px var(--ac)}.st.done{background:#12392e;color:var(--ok);border-color:var(--ok)}
+main{display:grid;grid-template-columns:300px 1fr 330px;gap:14px;padding:14px;max-width:1700px;margin:auto}@media(max-width:1150px){main{grid-template-columns:1fr}}
+.card{background:var(--p);border:1px solid var(--b);border-radius:14px;padding:14px;margin-bottom:14px}h3{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--mu)}
+label{font-size:11px;color:var(--mu);display:block;margin:8px 0 3px}input,select{width:100%;background:var(--p2);color:var(--fg);border:1px solid var(--b);border-radius:8px;padding:7px 9px;font:inherit}input:focus,select:focus{outline:2px solid var(--ac);border-color:transparent}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.g5 span{font-size:9px;color:var(--mu);text-align:center;display:block}.g5 input{padding:6px 2px;text-align:center}
+button{cursor:pointer;border:0;border-radius:9px;padding:9px 12px;font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--ac),#e5421f);width:100%;margin-top:8px;transition:.15s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+button.g{background:var(--p2);border:1px solid var(--b);color:var(--fg)}.row{display:flex;gap:6px}.row button{margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}.chip{font-size:11px;padding:4px 9px;border-radius:99px;background:var(--p2);border:1px solid var(--b);cursor:pointer;color:var(--fg)}.chip:hover{border-color:var(--ac);color:var(--ac)}
+#ring{width:100%;height:auto;display:block}.node{cursor:pointer}.node circle.c{fill:var(--p2);stroke:var(--b);stroke-width:2;transition:.3s}.node:hover circle.c{stroke:var(--ac)}.node.sp circle.c{stroke:var(--ac2);filter:drop-shadow(0 0 10px var(--ac2))}.node.sel circle.c{stroke:var(--bl)}
+.node text{fill:var(--fg);text-anchor:middle;font-size:11px}.node .em{font-size:24px}.ln{stroke:var(--b);stroke-width:2;stroke-dasharray:4 5}.ln.on{stroke:var(--ac2);animation:fl .6s linear infinite}@keyframes fl{to{stroke-dashoffset:-9}}
+.pulse{animation:pu 1.2s ease-out infinite;fill:none;stroke:var(--ac2)}@keyframes pu{from{r:34;opacity:.9}to{r:52;opacity:0}}
+#feed{height:470px;overflow:auto;padding-right:6px;scroll-behavior:smooth}.dv{text-align:center;color:var(--mu);font-size:11px;margin:12px 0 6px;display:flex;align-items:center;gap:8px}.dv:before,.dv:after{content:"";flex:1;border-top:1px dashed var(--b)}
+.m{display:flex;gap:9px;margin:7px 0;animation:in .35s ease}@keyframes in{from{opacity:0;transform:translateY(8px)}}.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--p2);border:2px solid var(--b);flex:none;font-size:17px}
+.bd{background:var(--p2);border:1px solid var(--b);border-left:3px solid var(--c,var(--b));border-radius:4px 12px 12px 12px;padding:7px 11px;max-width:100%}.bd b{font-size:12px}.tg{font-size:10px;padding:1px 7px;border-radius:99px;margin-left:6px;background:#0006;color:var(--c,var(--mu));font-weight:700}.mt{font-size:10px;color:var(--mu);margin-left:6px}.bd p{margin:3px 0 0}
+.t-Proposal{--c:var(--bl)}.t-Counteroffer{--c:var(--wn)}.t-Objection{--c:var(--no)}.t-Commitment,.t-Vote-ACCEPT,.t-Approval{--c:var(--ok)}.t-Vote-REJECT{--c:var(--no)}.t-Event{--c:var(--ac)}
+.bar{height:9px;background:#0007;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--ac),var(--ac2));transition:width .6s}.bar i.w{background:var(--wn)}.bar i.x{background:var(--no)}
+.gr{display:grid;grid-template-columns:70px 1fr 58px;gap:8px;align-items:center;margin:7px 0;font-size:12px}.gr small{color:var(--mu);text-align:right}
+.mc{border:1px solid var(--b);border-radius:10px;padding:9px;margin-bottom:8px;background:var(--p2)}.mc.sel{border-color:var(--bl)}.mc .h{display:flex;justify-content:space-between;align-items:center}.mc small{color:var(--mu);display:block;margin-top:3px}
+.md{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px}.m0{background:#12392e;color:var(--ok)}.m1{background:#3a2f12;color:var(--wn)}.m2{background:#3b1520;color:var(--no)}
+.ck{display:flex;gap:8px;margin:6px 0;font-size:12px}.ck i{font-style:normal;font-weight:800}.ck.ok i{color:var(--ok)}.ck.no i{color:var(--no)}.ck span{color:var(--mu)}
+.tl{display:flex;flex-wrap:wrap;gap:6px}.tv{font-size:11px;padding:3px 9px;border-radius:8px;border:1px solid var(--b);background:var(--p2)}.tv.PASS{color:var(--wn);border-color:var(--wn)}.tv.FAIL,.tv.REJECTED{color:var(--no);border-color:var(--no)}.tv.APPROVED{background:#12392e;color:var(--ok);border-color:var(--ok)}
+#ban{border-radius:12px;padding:12px 14px;margin-bottom:14px;display:none;font-weight:600}#ban.APPROVED{display:block;background:#12392e;border:1px solid var(--ok)}#ban.INFEASIBLE,#ban.DEADLOCK{display:block;background:#3b1520;border:1px solid var(--no)}#ban.STALE{display:block;background:#3a2412;border:1px solid var(--ac)}
+.dots span{animation:bl 1.2s infinite;display:inline-block}.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}@keyframes bl{50%{opacity:.2}}
+#toast{position:fixed;bottom:18px;right:18px;background:var(--p2);border:1px solid var(--ac);padding:10px 14px;border-radius:10px;display:none;z-index:20;max-width:340px}dialog{background:var(--p);color:var(--fg);border:1px solid var(--b);border-radius:14px;width:min(420px,92vw)}dialog::backdrop{background:#000a}
+</style></head><body>
+<header><div class="logo">ARES<b>·</b>ACCORD</div><span id="pst" class="pill">IDLE</span><span id="plan" class="pill">no plan</span><div class="steps" id="steps"></div><div class="sp"></div><span id="llm" class="pill" style="cursor:pointer" title="LLM settings"></span></header>
+<main>
+<aside>
+<div class="card"><h3>Resource pool</h3><div class="g5" id="pool"></div>
+<label>Tie-break when two plans are equal</label><select id="pol"><option value="bal">Balanced</option><option value="hab">Protect habitat</option><option value="rep">Protect repair capacity</option></select>
+<button id="go">▶ Start crisis</button></div>
+<div class="card"><h3>Emergency injection</h3><div class="chips" id="chips"></div>
+<label>Event name</label><input id="evn" value="Solar aftershock"><label>Resource change (negative reduces)</label><div class="g5" id="ev"></div>
+<label style="display:flex;gap:7px;align-items:center;margin-top:10px"><input type="checkbox" id="ov" checked style="width:auto"> Allow Crisis Override (risk 28 · 2 sacrifices)</label>
+<button id="inj" disabled>⚡ Inject event</button></div>
+<div class="card"><h3>Tools</h3><div class="row"><button class="g" id="xj">Export JSON</button><button class="g" id="xc">Export CSV</button></div><div class="row"><button class="g" id="cfg">LLM settings</button><button class="g" id="rs">Reset</button></div></div>
+</aside>
+<section>
+<div id="ban"></div>
+<div class="card"><h3>Council · click an agent to filter the conversation</h3><svg id="ring" viewBox="0 0 520 360"></svg></div>
+<div class="card"><h3>Live negotiation <span id="flt"></span></h3><div id="feed"></div></div>
+</section>
+<aside>
+<div class="card"><h3>Resources · pool / used / reserve</h3><div id="gau"></div><div id="rsk" style="margin-top:8px;color:var(--mu)"></div></div>
+<div class="card"><h3>Mode board</h3><div id="brd"></div></div>
+<div class="card"><h3>Validator</h3><div id="val"><span style="color:var(--mu)">No plan yet</span></div></div>
+<div class="card"><h3>Plan versions</h3><div class="tl" id="tl"><span style="color:var(--mu)">—</span></div></div>
+</aside></main>
+<dialog id="dlg"><h3>LLM settings</h3><label>Provider</label><select id="lp"></select><label>Model</label><input id="lm"><label>Base URL</label><input id="lb"><label>API key (kept in backend memory only)</label><input id="lk" type="password">
+<label style="display:flex;gap:7px;align-items:center"><input type="checkbox" id="le" style="width:auto" checked> Use LLM for agents</label><div id="lr" style="margin:8px 0;font-size:12px"></div>
+<div class="row"><button class="g" id="lt">Test</button><button id="ls">Save</button><button class="g" id="lx">Close</button></div></dialog><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),E={LS:'🌬️',MED:'⚕️',FOOD:'🌱',ENG:'🔧',CMD:'🛰️',Validator:'🛡️'},POS={CMD:[260,180],LS:[85,75],MED:[435,75],FOOD:[85,290],ENG:[435,290]},RN={1:'Requests',2:'Counteroffers',3:'Sacrifice & selection',4:'Returns, validation & votes'},PRAC=[['Solar aftershock',[-4,0,0,0,0]],['Water contamination',[0,-3,0,0,0]],['Secondary oxygen leak',[0,0,-3,0,0]],['Rover actuator failure',[0,0,0,-4,0]],['Relay interference',[0,0,0,0,-2]]];
+let MT,ST,MS=[],last=0,seen=0,flt=null,busy=0;
+const nm=k=>k=='CMD'?'Commander':k=='Validator'?'Validator':MT.M[k][0];
+async function api(p,b){try{const r=await fetch(p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(!r.ok){toast(j.detail||'Error');return null}return j}catch(e){toast('Backend unreachable');return null}}
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',3500)}
+const tot=sel=>MT.R.map((_,i)=>MT.K.reduce((a,k)=>a+MT.M[k][1][sel[k]][1][i],0));
+function inputs(el,v){el.innerHTML=MT.R.map((r,i)=>`<div><span>${r.slice(0,5)}</span><input type=number value="${v[i]}"></div>`).join('')}
+const vals=el=>[...el.querySelectorAll('input')].map(i=>+i.value||0);
+async function init(){MT=await api('/api/modes');if(!MT)return setTimeout(init,1500);inputs($('#pool'),[79,52,59,26,17]);inputs($('#ev'),[-4,0,0,0,0]);
+$('#chips').innerHTML=PRAC.map((p,i)=>`<span class=chip data-i=${i}>${p[0]}</span>`).join('')+'<span class=chip data-i=r>🎲 Random crisis</span>';
+$('#chips').onclick=e=>{const i=e.target.dataset.i;if(i==null)return;let n,d;if(i=='r'){d=[0,0,0,0,0];const c=1+Math.floor(Math.random()*3);for(let j=0;j<c;j++)d[Math.floor(Math.random()*5)]=-(1+Math.floor(Math.random()*8));n='Unseen crisis '+Math.floor(Math.random()*900+100)}else[n,d]=PRAC[i];$('#evn').value=n;inputs($('#ev'),d)};
+ring();tick()}
+async function tick(){const s=await api('/api/state');if(s){ST=s;const n=await api('/api/transcript?since='+last)||[];if(n.length){seen=Date.now();n.forEach(m=>{MS.push(m);last=m.id});if(n.some(m=>m.type=='Event'&&m.text.startsWith('EVENT')))toast('Event injected - plan marked STALE');}render(n)}setTimeout(tick,ST&&ST.running?600:1500)}
+function ring(){let h='';MT.K.forEach(k=>h+=`<line class=ln id=l${k} x1=${POS[k][0]} y1=${POS[k][1]} x2=260 y2=180 />`);
+['CMD',...MT.K].forEach(k=>{const[x,y]=POS[k];h+=`<g class=node id=n${k} data-k=${k} transform="translate(${x},${y})"><circle class=pulse r=34 style=display:none /><circle class=c r=34 /><text class=em y=8>${E[k]}</text><text y=52 font-weight=700>${nm(k)}</text><text y=67 id=nm${k} style="fill:var(--mu)"></text><text id=vt${k} x=26 y=-24 style="font-size:18px"></text></g>`});$('#ring').innerHTML=h;
+$('#ring').onclick=e=>{const g=e.target.closest('.node');if(!g)return;flt=flt==g.dataset.k?null:g.dataset.k;feed(true);render([])}}
+function render(nw){const S=ST,p=S.plan,L=S.llm;$('#pst').textContent=S.status;$('#pst').className='pill s-'+S.status;$('#plan').textContent=p?`plan v${p.ver} · ${p.status}`:'no plan';
+$('#llm').textContent=L.enabled?`🤖 LLM · ${L.provider}/${L.model}`:'⚙ Rule-based fallback · click to add LLM';$('#llm').style.borderColor=L.enabled?'var(--ok)':'var(--wn)';
+const mx=Math.max(4,S.round);$('#steps').innerHTML=Array.from({length:mx},(_,i)=>`<div class="st ${S.round==i+1&&S.running?'on':i+1<=S.round?'done':''}" title="${RN[i+1]||'Revised plan'}">${i+1}</div>`).join('');
+$('#go').disabled=S.running;$('#inj').disabled=S.running||S.status!='APPROVED';
+const b=$('#ban');b.className=S.status;const lastA=[...MS].reverse().find(m=>m.type=='Approval'&&m.frm=='CMD');
+b.innerHTML=S.status=='APPROVED'?`✅ Plan v${p.ver} approved · risk ${MT.K.reduce((a,k)=>a+MT.M[k][1][p.sel[k]][2],0)} · four ACCEPT votes · validator PASS`:S.status=='INFEASIBLE'||S.status=='DEADLOCK'?`⛔ ${lastA?lastA.text:S.status}`:S.status=='STALE'?'⚠ Previous plan is STALE - agents are renegotiating':'';
+const t=p?tot(p.sel):[0,0,0,0,0];$('#gau').innerHTML=MT.R.map((r,i)=>{const u=S.pool[i]?t[i]/S.pool[i]*100:0;return`<div class=gr><span>${r}</span><div class=bar><i class="${u>100?'x':u>92?'w':''}" style="width:${Math.min(100,u)}%"></i></div><small>${t[i]}/${S.pool[i]}</small></div>`}).join('');
+$('#rsk').textContent=p?`Risk ${MT.K.reduce((a,k)=>a+MT.M[k][1][p.sel[k]][2],0)} / ${S.lim} · Reserve ${S.pool.map((v,i)=>v-t[i]).join(' / ')}`:`Pool ${S.pool.join(' / ')}`;
+const sp=MS.length&&Date.now()-seen<3000&&S.running?MS[MS.length-1].frm:null;
+MT.K.concat('CMD').forEach(k=>{const n=$('#n'+k);n.classList.toggle('sp',k==sp);n.classList.toggle('sel',k==flt);n.querySelector('.pulse').style.display=k==sp?'':'none';if(k=='CMD')return;$('#l'+k).classList.toggle('on',k==sp||sp=='CMD'&&S.running);
+$('#nm'+k).textContent=p?MT.M[k][1][p.sel[k]][0]:(S.agents[k]?MT.M[k][1][S.agents[k].cur][0]:'');const v=p&&p.votes[k];$('#vt'+k).textContent=v?(v.v=='ACCEPT'?'✅':'❌'):''});
+$('#brd').innerHTML=MT.K.map(k=>{const i=p?p.sel[k]:S.agents[k].cur,m=MT.M[k][1][i],c=p?p.commits.filter(x=>x.ben==k):[];return`<div class="mc ${k==flt?'sel':''}"><div class=h><b>${nm(k)}</b><span class="md m${i}">${m[0]}</span></div><small>${i==2?'💥 '+MT.LOSS[k]:i==1?'Recovery debt, mission completes':'Full mission protected'} · risk ${m[2]}</small>${c.map(x=>`<small>${x.ok?'✔':'○'} ${nm(x.owner)}: ${x.text}</small>`).join('')}<small>Refused sacrifice ×${S.agents[k].refusals}</small></div>`}).join('');
+$('#val').innerHTML=S.vr.length?S.vr.map(x=>`<div class="ck ${x.ok?'ok':'no'}"><i>${x.ok?'✓':'✗'}</i><div><b>${x.n}</b><br><span>${x.r}</span></div></div>`).join(''):'<span style="color:var(--mu)">No plan yet</span>';
+tl();feed(nw.length&&!flt?false:true,nw)}
+function tl(){const v={};MS.forEach(m=>{let r;if(m.frm=='Validator'&&(r=/Plan v(\d+): (PASS|FAIL)/.exec(m.text)))v[r[1]]={s:r[2],sc:m.scenario};if(m.type=='Approval'&&(r=/APPROVED plan v(\d+)/.exec(m.text)))v[r[1]].s='APPROVED';if(r=/Plan v(\d+) rejected/.exec(m.text))v[r[1]].s='REJECTED'});const e=Object.entries(v).slice(-10);
+$('#tl').innerHTML=e.length?e.map(([k,x])=>`<span class="tv ${x.s}" title="${x.sc}">v${k} ${x.s=='APPROVED'?'★ approved':x.s.toLowerCase()}</span>`).join(''):'—'}
+let pm=null;function bub(m){let h='';if(!pm||pm.scenario!=m.scenario||pm.round!=m.round)h=`<div class=dv>${m.scenario} · Round ${m.round} — ${RN[m.round]||'Revised plan & votes'}</div>`;pm=m;
+const src=m.source=='llm'?'🤖':m.source=='rule-fallback'?'⚠ fallback':'⚙';return h+`<div class="m t-${m.type}"><div class=av>${E[m.frm]||'👤'}</div><div class=bd><b>${nm(m.frm)}</b><span class=tg>${m.type.replace('Vote-','Vote ')}</span><span class=mt>v${m.plan_version} · ${src}</span><p>${m.text.replace(/</g,'&lt;')}</p></div></div>`}
+function feed(full,nw){const f=$('#feed'),near=f.scrollHeight-f.scrollTop-f.clientHeight<90;$('#flt').textContent=flt?`· ${nm(flt)} (click again to clear)`:'';
+if(full){pm=null;f.innerHTML=MS.filter(m=>!flt||m.frm==flt).map(bub).join('')}else(nw||[]).filter(m=>!flt||m.frm==flt).forEach(m=>f.insertAdjacentHTML('beforeend',bub(m)));
+f.querySelector('.ty')?.remove();if(ST.running)f.insertAdjacentHTML('beforeend','<div class="ty dots" style="color:var(--mu);margin:8px 44px">agents deliberating <span>●</span><span>●</span><span>●</span></div>');
+if(near||full)f.scrollTop=f.scrollHeight}
+$('#go').onclick=async()=>{MS=[];last=0;flt=null;busy=0;const r=await api('/api/start',{pool:vals($('#pool')),policy:$('#pol').value});if(r)MS=[],last=0};
+$('#inj').onclick=()=>api('/api/event',{name:$('#evn').value||'Emergency',delta:vals($('#ev')),allow_override:$('#ov').checked});
+$('#rs').onclick=async()=>{if(confirm('Delete the whole negotiation history?')){await api('/api/reset',{});MS=[];last=0;flt=null;pm=null;feed(true,[])}};
+const dl=async(u,f)=>{const r=await fetch(u);const a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());a.download=f;a.click()};$('#xj').onclick=()=>dl('/api/export/json','ares_plan.json');$('#xc').onclick=()=>dl('/api/export/csv','ares_transcript.csv');
+async function lm(){const i=await api('/api/llm');if(!i)return;$('#lp').innerHTML=Object.keys(i.presets).map(k=>`<option ${k==i.provider?'selected':''}>${k}</option>`).join('');$('#lm').value=i.model;$('#lb').value=i.base;$('#lk').placeholder=i.key_set?'saved '+i.key_hint:'paste key';$('#le').checked=i.enabled||!i.key_set;$('#lp').onchange=()=>{$('#lm').value=i.presets[$('#lp').value].model;$('#lb').value=i.presets[$('#lp').value].base};$('#dlg').showModal()}
+const body=()=>({provider:$('#lp').value,model:$('#lm').value,base:$('#lb').value,api_key:$('#lk').value||null,enabled:$('#le').checked});$('#cfg').onclick=$('#llm').onclick=lm;$('#lx').onclick=()=>$('#dlg').close();
+$('#lt').onclick=async()=>{$('#lr').textContent='Testing…';await api('/api/llm/config',body());const t=await api('/api/llm/test');$('#lr').innerHTML=t?(t.ok?`<span style=color:var(--ok)>✓ Connected: ${t.provider}/${t.model}</span>`:`<span style=color:var(--no)>✗ ${t.error}</span>`):''};
+$('#ls').onclick=async()=>{await api('/api/llm/config',body());$('#dlg').close();toast('LLM settings saved')};
+init();
+</script></body></html>

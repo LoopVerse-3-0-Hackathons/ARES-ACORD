@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    working_dir: /app/backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file: [.env.example]
+    ports: ["8000:8000"]
+  ui:
+    build: .
+    working_dir: /app/frontend
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    environment: [ARES_API=http://api:8000]
+    ports: ["8501:8501"]
+    depends_on: [api]
